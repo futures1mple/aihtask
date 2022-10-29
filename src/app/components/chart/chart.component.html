@@ -1,0 +1,41 @@
+<div class="chart-component" >
+    <label style="width: 100%;"><span class="title">Currency reservses,</span> In $</label>
+    <div class="legends-container">
+        <div class="" *ngFor="let legend of this.data">
+            <div class="legend">
+                <div class="legend-square" [ngStyle]="{'backgroundColor': legend.color}"></div>
+                <div class="legend-label">{{legend.label}}</div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="charts-container">
+
+        <div class="chart">
+            <canvas 
+            class="chart-canvas"
+            baseChart
+            height="300px"
+            [data]="barChartData"
+            [options]="barChartOptions"
+            [type]="barChartType"
+            [plugins]="barChartPlugins"
+            (wheel)="scroll($event, chart)"
+            >
+            </canvas>
+        </div>
+        <div class="divider"></div>
+        <div class="chart">
+            <canvas 
+            class="chart-canvas"
+            baseChart
+            height="300px"
+            [data]="barChartData"
+            [options]="barChartOptions"
+            [type]="barChartType"
+            [plugins]="barChartPlugins"
+            >
+            </canvas>
+        </div>
+    </div>
+</div>

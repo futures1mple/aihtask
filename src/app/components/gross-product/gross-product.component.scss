@@ -1,0 +1,76 @@
+.chart-component {
+    border: 1px solid rgba(200,213,238,255);
+    padding: 1rem 2rem;
+    width: 100%;
+    border-radius: 10px;
+    background-color: rgba(200,213,238,0.5);
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;    
+    min-height: 50vh;
+
+    .charts-container {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .legends-container {
+        margin-top: 0.7rem;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+
+        .legend {
+            margin: 0 1rem;
+            display: flex;
+            align-items: center;
+            .legend-square {
+                margin-right: 0.5rem;
+                width: 10px;
+                height: 10px;
+            }
+            .legend-square-line {
+                margin-right: 0.5rem;
+                width: 1rem;
+                border-top: 4px;
+                border-style: dotted;
+            }
+            .legend-label {
+                font-size: 0.9rem;
+                color: grey;
+            }
+        }
+    }
+
+    .title {
+        font-weight: bold;
+    }
+
+    .divider {
+        // transform: translateY(-55px);
+        height: 85%;
+        width: 0.1px;
+        border-right: 3px dotted rgba(0, 0, 0, 0.351);
+    }
+
+    @media (max-width: 992px) {
+        .divider {
+            display: none;
+        }
+    }
+
+    .chart {
+        width: 49%;
+
+        .chart-canvas {
+            height: 100%;
+        }
+    }
+    @media (max-width: 992px) {
+        .chart {
+            width: 100%;
+        }
+    }
+
+}
