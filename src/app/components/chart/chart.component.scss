@@ -9,16 +9,11 @@
     flex-wrap: wrap;    
     min-height: 50vh;
 
-    .charts-container {
-        display: flex;
-        width: 100%;
-        flex-wrap: wrap;
-    }
-
     .legends-container {
         margin-top: 0.7rem;
         width: 100%;
         display: flex;
+        flex-wrap: wrap;
 
         .legend {
             margin: 0 1rem;
@@ -47,25 +42,22 @@
         border-right: 3px dotted rgba(0, 0, 0, 0.351);
     }
 
-    @media (max-width: 992px) {
-        .divider {
-            display: none;
-        }
-    }
-
-    .chart {
-        width: 49%;
-
+    .charts-container {
+        display: flex;
+        width: 100%;
+        overflow-y: auto;
         
-
-        .chart-canvas {
-            height: 100%;
-        }
-    }
-    @media (max-width: 992px) {
         .chart {
-            width: 100%;
+            width: 49%;
+            min-width: 180px !important;
+            
+            
+            
+            .chart-canvas {
+                height: 100%;
+            }
         }
     }
+   
 
 }

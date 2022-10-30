@@ -2,6 +2,7 @@ import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Chart,ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { populationData, populationMonthData } from 'src/app/data/data';
 
 import {default as Annotation} from 'chartjs-plugin-annotation';
 
@@ -21,7 +22,8 @@ export class PopulationComponent implements OnInit {
       this.annotations.push({
         type: 'label',
         xValue: index,
-        yValue: 30.5,
+        yValue: this.data[1].data[index]*2 + datapoint*2,
+        yScaleID: 'yB',
         backgroundColor: this.data[2].color,
         color: 'white',
         content: `${datapoint}`,
@@ -35,38 +37,29 @@ export class PopulationComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
   public annotations: Object[] = []
-  public data = [
-    {
-      data: [ 23, 12, 1, 2, 3, 4, 5, 6, 7 ],
-      label: 'Unemployed (k)',
-      color: 'rgba(52,125,160,255)',
-      line: false,
-    },
-    {
-      data: [ 6.4, 7.1, 7, 6, 5, 4, 3, 2, 1 ],
-      label:'Workforce (k)',
-      color: 'rgba(226,120,112,255)',
-      line: true,
-    },
-    {
-      data: [ 1.1, 1.2, 1, 2 ,3, 1, 2, 3, 1 ],
-      label: 'Salary(₼)',
-      color: 'rgba(125,151,181,255)',
-      line: false,
-    }
-  ]
+  public data = populationData
+  public monthData = populationMonthData
+  public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
+  private monthLabels = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  private d = new Date();
+  private month = this.d.getMonth()
+  private year = this.d.getFullYear()
+
+  public mounthLabels = [ `${this.monthLabels[this.month].substring(0,3)} - ${this.year - 1}` , `${this.monthLabels[this.month].substring(0,3)} - ${this.year}`]
+
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     scales: {
       y: {
-        // display: false,
+        display: false,
         stacked: true,
         stack: 'stack',
         min: 0,
       },
       yB: {
-        // display: false,
+        display: false,
         stacked: true,
         stack: 'stack',
         beginAtZero: true,
@@ -94,18 +87,6 @@ export class PopulationComponent implements OnInit {
           }
         },
         anchor: 'center',
-        formatter: (value, context) => {
-
-          const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
-            return datapoint.data[context.dataIndex]
-          })
-          function totalSum (total: any, datapoint: any) {
-            return total + datapoint
-          }
-          const sum = sumValue.reduce(totalSum,0)
-
-          return value < sum/10 ? "" : `${value}` ;
-        }
       }
     }
   };
@@ -141,23 +122,23 @@ export class PopulationComponent implements OnInit {
   }
 
   public barChartData: ChartData = {
-    labels: [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ],
+    labels: this.labels,
     datasets: [
       { 
-        data: [ 23, 12, 1, 2, 3, 4, 5, 6, 7 ], 
-        barThickness: 80, 
-        label: 'Unemployed (k)', 
-        backgroundColor: 'rgba(52,125,160,255)',
+        data: this.data[0].data, 
+        barPercentage: .5, 
+        label: this.data[0].label, 
+        backgroundColor: this.data[0].color,
         type: 'bar',
       },
       { 
-        data: [ 6.4, 7.1, 7, 6, 5, 4, 3, 2, 1 ], 
+        data: this.data[1].data, 
         yAxisID: 'yB',
-        label: 'Workforce (k)', 
-        borderColor: 'rgba(226,120,112,255)', 
-        backgroundColor: 'transparent', 
-        pointBackgroundColor: 'rgba(226,120,112,255)',
-        pointBorderColor: 'rgba(226,120,112,255)',
+        label: this.data[1].label, 
+        borderColor: this.data[1].color, 
+        backgroundColor: this.data[1].color, 
+        pointBackgroundColor: this.data[1].color,
+        pointBorderColor: this.data[1].color,
         borderDash: [10,4],
         type: 'line',
         pointStyle: 'rect',
@@ -166,7 +147,41 @@ export class PopulationComponent implements OnInit {
             title: {
               textStrokeColor:'grey',
               borderColor: 'grey',
-              align: 'top',
+              align: 'bottom',
+              color: 'black'
+            }
+          }
+        },
+      },
+    ],
+  };
+  public monthChartData: ChartData = {
+    labels: this.mounthLabels,
+    datasets: [
+      { 
+        data: this.monthData[0].data, 
+        barPercentage: .5, 
+        label: this.monthData[0].label, 
+        backgroundColor: this.monthData[0].color,
+        type: 'bar',
+      },
+      { 
+        data: this.monthData[1].data, 
+        yAxisID: 'yB',
+        label: this.monthData[1].label, 
+        borderColor: this.monthData[1].color, 
+        backgroundColor: this.monthData[1].color, 
+        pointBackgroundColor: this.monthData[1].color,
+        pointBorderColor: this.monthData[1].color,
+        borderDash: [10,4],
+        type: 'line',
+        pointStyle: 'rect',
+        datalabels: {
+          labels: {
+            title: {
+              textStrokeColor:'grey',
+              borderColor: 'grey',
+              align: 'bottom',
               color: 'black'
             }
           }

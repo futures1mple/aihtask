@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import {default as Annotation} from 'chartjs-plugin-annotation';
+import { grossProductMonthData, grossProductData } from 'src/app/data/data';
 
 @Component({
   selector: 'app-gross-product',
@@ -16,11 +17,19 @@ export class GrossProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  this.sum.map((data, index) => {
+    this.data.map((data1, index1) => {
+      if(index1 != 4) {
+        this.sum[index] += data1.data[index]
+      }
+    })
+  })
+  console.log(this.sum);
     this.data[4].data.forEach((datapoint, index) => {
       this.annotations.push({
         type: 'label',
         xValue: index,
-        yValue: 30.5,
+        yValue: this.sum[index] + 5.5,
         backgroundColor: this.data[4].color,
         color: 'white',
         content: `${datapoint}`,
@@ -33,47 +42,21 @@ export class GrossProductComponent implements OnInit {
   }
 
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
+  public sum: number[] = [0,0,0,0,0,0,0,0,0]
 
-  public data = [
-    {
-      data: [ 3, 2.1, 3, 4, 5, 6, 7, 8, 9 ],
-      label: 'Other',
-      color: 'rgba(142,189,100,255)',
-      line: false
-    },
-    {
-      data: [ 6.4, 7.1, 7, 6, 5, 4, 3, 2, 1 ],
-      label:'ItAndTelecom',
-      color: 'rgba(95,155,216,255)',
-      line: false
-    },
-    {
-      data: [ 4, 5, 8, 3, 2, 1, 7, 6, 9 ],
-      label: 'Agriculture',
-      color: 'rgba(253,192,0,255)',
-      line: false
-    },
-    {
-      data: [ 1.1, 1.2, 1, 2 ,3, 1, 2, 3, 1 ],
-      label: 'Construction',
-      color: 'rgba(67,188,180,255)',
-      line: false
-    },
-    {
-      data: [ 6.4, 7.1, 7, 6, 5, 4, 3, 2, 1 ],
-      label: 'Per Capita',
-      color: 'rgba(125,151,181,255)',
-      line: false
-    },
-    {
-      data: [ 4, 5, 8, 3, 2, 1, 7, 6, 9 ],
-      label: 'Non-oil',
-      color: 'rgba(226,120,112,255)',
-      line: true
-    }
-  ]
+  public data = grossProductData
 
   public annotations: Object[] = []
+
+  public monthData = grossProductMonthData
+  public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
+  private monthLabels = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  private d = new Date();
+  private month = this.d.getMonth()
+  private year = this.d.getFullYear()
+
+  public mounthLabels = [ `${this.monthLabels[this.month].substring(0,3)} - ${this.year - 1}` , `${this.monthLabels[this.month].substring(0,3)} - ${this.year}`]
 
 
   public barChartOptions: ChartConfiguration['options'] = {
@@ -111,7 +94,6 @@ export class GrossProductComponent implements OnInit {
         },
         anchor: 'center',
         formatter: (value, context) => {
-
           const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
             return datapoint.data[context.dataIndex]
           })
@@ -157,7 +139,7 @@ export class GrossProductComponent implements OnInit {
   }
 
   public barChartData: ChartData = {
-    labels: [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ],
+    labels: this.labels,
     datasets: [
       { 
         data: this.data[5].data, 
@@ -212,20 +194,63 @@ export class GrossProductComponent implements OnInit {
         borderColor: 'transparent',
         backgroundColor:'transparent'
       }
-      // { 
-      //   data: [ 87, 34, 23, 19, 86, 55, 90 ], 
-      //   label: 'Non-oil', 
-      //   type: 'line',  
-      //   borderColor: 'red', 
-      //   backgroundColor: 'red', 
-      //   pointBorderColor: 'grey', 
-      //   pointBackgroundColor:'red', 
-      //   borderDash: [10,4],
-      //   pointStyle: 'rect',
-      //   datalabels: {
-      //     display: false
-      //   }
-      // }
+    ],
+  };
+  public monthChartData: ChartData = {
+    labels: this.mounthLabels,
+    datasets: [
+      { 
+        data: this.monthData[5].data, 
+        type: 'line', 
+        label: this.monthData[5].label, 
+        backgroundColor: this.monthData[5].color, 
+        borderColor: this.monthData[5].color,
+        pointBackgroundColor: this.monthData[5].color,
+        pointBorderColor: this.monthData[5].color,
+        pointStyle: 'rect',
+        borderDash: [10,5],
+        datalabels: {
+          labels: {
+            
+            title: {
+              display: false,
+              color: 'black',
+              align: 'top',
+            },
+          }
+        }
+      },
+      { data: this.monthData[0].data, barPercentage: 0.5, label: this.monthData[0].label, backgroundColor: this.monthData[0].color },
+      { data: this.monthData[1].data, barPercentage: 0.5, label: this.monthData[1].label, backgroundColor: this.monthData[1].color },
+      { data: this.monthData[2].data, barPercentage: 0.5, label: this.monthData[2].label, backgroundColor: this.monthData[2].color },
+      { data: this.monthData[3].data, barPercentage: 0.5, label: this.monthData[3].label, backgroundColor: this.monthData[3].color },
+      { 
+        data: [ 0, 0 ], 
+        
+        datalabels: {
+          labels: {
+            title: {
+              color: 'black'
+            }
+          },
+          align: 'top',
+          anchor: 'end',
+          formatter: (value, context) => {
+            const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
+              return datapoint.data[context.dataIndex]
+            })
+            function totalSum (total: any, datapoint: any) {
+              return total + datapoint
+            }
+            const sum = sumValue.reduce(totalSum,0)
+
+            return sum ;
+          }
+        },
+        label: '',
+        borderColor: 'transparent',
+        backgroundColor:'transparent'
+      }
     ],
   };
 }

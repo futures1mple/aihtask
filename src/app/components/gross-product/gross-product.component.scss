@@ -9,12 +9,7 @@
     flex-wrap: wrap;    
     min-height: 50vh;
 
-    .charts-container {
-        display: flex;
-        width: 100%;
-        flex-wrap: wrap;
-    }
-
+   
     .legends-container {
         margin-top: 0.7rem;
         width: 100%;
@@ -53,24 +48,20 @@
         width: 0.1px;
         border-right: 3px dotted rgba(0, 0, 0, 0.351);
     }
-
-    @media (max-width: 992px) {
-        .divider {
-            display: none;
-        }
-    }
-
-    .chart {
-        width: 49%;
-
-        .chart-canvas {
-            height: 100%;
-        }
-    }
-    @media (max-width: 992px) {
+    .charts-container {
+        display: flex;
+        width: 100%;
+        overflow-y: auto;
+        
         .chart {
-            width: 100%;
+            width: 49%;
+            min-width: 180px !important;
+
+            .chart-canvas {
+                height: 100%;
+            }
         }
     }
+    
 
 }

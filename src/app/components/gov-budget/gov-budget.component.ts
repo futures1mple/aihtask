@@ -2,6 +2,7 @@ import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { govBudgetData, govBudgetMonthData } from 'src/app/data/data';
 
 @Component({
   selector: 'app-gov-budget',
@@ -16,32 +17,17 @@ export class GovBudgetComponent implements OnInit {
   }
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
-  public data = [
-    {
-      data: [ 3, 2.1, 3, 4, 5, 6, 7, 8, 9 ],
-      label: 'Income',
-      color: 'rgba(52,125,160,255)',
-      line: false
-    },
-    {
-      data: [ 6.4, 7.1, 7, 6, 5, 4, 3, 2, 1 ],
-      label:'Spending',
-      color: 'rgba(226,120,112,255)',
-      line: false
-    },
-    {
-      data: [ 1.1, 1.2, 1, 2 ,3, 1, 2, 3, 1 ],
-      label: 'Export',
-      color: 'red',
-      line: true
-    },
-    {
-      data: [ 4, 5, 8, 3, 2, 1, 7, 6, 9 ],
-      label: 'Import',
-      color: 'green',
-      line: true
-    }
-  ]
+  public data = govBudgetData
+  public monthData = govBudgetMonthData
+  public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
+  private monthLabels = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  private d = new Date();
+  private month = this.d.getMonth()
+  private year = this.d.getFullYear()
+
+  public mounthLabels = [ `${this.monthLabels[this.month].substring(0,3)} - ${this.year - 1}` , `${this.monthLabels[this.month].substring(0,3)} - ${this.year}`]
+
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -114,29 +100,29 @@ export class GovBudgetComponent implements OnInit {
   }
 
   public barChartData: ChartData = {
-    labels: [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ],
+    labels: this.labels,
     datasets: [
       { 
-        data: [ 3, 2.1, 3, 4, 5, 6, 7, 8, 9 ], 
-        label: 'Income', 
-        backgroundColor: 'rgba(52,125,160,255)',
+        data: this.data[0].data, 
+        label: this.data[0].label, 
+        backgroundColor: this.data[0].color,
         stack: 'combined',
       },
       { 
-        data: [  6.4, 7.1, 7, 6, 5, 4, 3, 2, 1 ], 
-        label: 'Spending', 
-        backgroundColor: 'rgba(226,120,112,255)', 
+        data: this.data[1].data, 
+        label: this.data[1].label, 
+        backgroundColor: this.data[1].color, 
 
       },
       { 
-        data: [ 3, 7.1, 7, 6, 5, 4, 3, 2, 1 ], 
-        label: 'Export', 
+        data: this.data[2].data, 
+        label: this.data[2].label, 
         yAxisID: 'yL',
-        borderColor: 'red', 
-        backgroundColor: 'transparent',
-        pointBackgroundColor: 'red',
+        borderColor: this.data[2].color, 
+        backgroundColor: this.data[2].color,
+        pointBackgroundColor: this.data[2].color,
         borderDash: [10,4],
-        pointBorderColor: 'red',
+        pointBorderColor: this.data[2].color,
         type: 'line',
         stack: 'combined',
         pointStyle: 'rect',
@@ -152,13 +138,13 @@ export class GovBudgetComponent implements OnInit {
         }
       },
       { 
-        data: [ 4, 5, 8, 3, 2, 1, 7, 6, 9 ], 
-        label: 'Import', 
+        data: this.data[3].data, 
+        label: this.data[3].label, 
         yAxisID: 'yL',
-        borderColor: 'green', 
-        backgroundColor: 'transparent', 
-        pointBackgroundColor: 'green',
-        pointBorderColor: 'green',
+        borderColor: this.data[3].color, 
+        backgroundColor: this.data[3].color,
+        pointBackgroundColor: this.data[3].color,
+        pointBorderColor: this.data[3].color,
         borderDash: [10,4],
         type: 'line',
         stack: 'combined',
@@ -172,20 +158,67 @@ export class GovBudgetComponent implements OnInit {
           }
         }
       },
-      // { 
-      //   data: [ 87, 34, 23, 19, 86, 55, 90 ], 
-      //   label: 'Non-oil', 
-      //   type: 'line',  
-      //   borderColor: 'red', 
-      //   backgroundColor: 'red', 
-      //   pointBorderColor: 'grey', 
-      //   pointBackgroundColor:'red', 
-      //   borderDash: [10,4],
-      //   pointStyle: 'rect',
-      //   datalabels: {
-      //     display: false
-      //   }
-      // }
+    ],
+  };
+  public monthChartData: ChartData = {
+    labels: this.mounthLabels,
+    datasets: [
+      { 
+        data: this.monthData[0].data, 
+        label: this.monthData[0].label, 
+        backgroundColor: this.monthData[0].color,
+        stack: 'combined',
+      },
+      { 
+        data: this.monthData[1].data, 
+        label: this.monthData[1].label, 
+        backgroundColor: this.monthData[1].color, 
+
+      },
+      { 
+        data: this.monthData[2].data, 
+        label: this.monthData[2].label, 
+        yAxisID: 'yL',
+        borderColor: this.monthData[2].color, 
+        backgroundColor: this.monthData[2].color,
+        pointBackgroundColor: this.monthData[2].color,
+        borderDash: [10,4],
+        pointBorderColor: this.monthData[2].color,
+        type: 'line',
+        stack: 'combined',
+        pointStyle: 'rect',
+        datalabels: {
+          labels: {
+            title: {
+              textStrokeColor:'grey',
+              borderColor: 'grey',
+              align: 'top',
+              color: 'black'
+            }
+          }
+        }
+      },
+      { 
+        data: this.monthData[3].data, 
+        label: this.monthData[3].label, 
+        yAxisID: 'yL',
+        borderColor: this.monthData[3].color, 
+        backgroundColor: this.monthData[3].color,
+        pointBackgroundColor: this.monthData[3].color,
+        pointBorderColor: this.monthData[3].color,
+        borderDash: [10,4],
+        type: 'line',
+        stack: 'combined',
+        pointStyle: 'rect',
+        datalabels: {
+          labels: {
+            title: {
+              align: 'top',
+              color: 'black'
+            }
+          }
+        }
+      },
     ],
   };
 
