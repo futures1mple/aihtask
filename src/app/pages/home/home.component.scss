@@ -2,6 +2,20 @@
     padding: 3rem 0;
     display: flex;
     flex-wrap: wrap;
+    .titlec {
+        padding: 0 1rem;
+        width: 100%;
+        font-weight: bold;
+        font-size: 2rem;
+    }
+    .subtitle {
+        padding: 0 1rem;
+        width: 100%;
+
+        i {
+            font-weight: bold;
+        }   
+    }
 
     .chart-block {
         width: 50%;

@@ -1,5 +1,5 @@
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Chart,ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { populationData, populationMonthData } from 'src/app/data/data';
@@ -16,6 +16,7 @@ export class PopulationComponent implements OnInit {
   constructor() {
     Chart.register(Annotation)
   }
+  
 
   ngOnInit(): void {
     this.data[2].data.forEach((datapoint, index) => {
@@ -33,10 +34,36 @@ export class PopulationComponent implements OnInit {
         }
       })
     })
+    this.monthData[2].data.forEach((datapoint, index) => {
+      this.monthAnnotations.push({
+        type: 'label',
+        xValue: index,
+        yScaleID: 'yB',
+        yValue: this.monthData[1].data[index]*2 + datapoint*2,
+        backgroundColor: this.monthData[2].color,
+        color: 'white',
+        content: `${datapoint}`,
+        padding: 10,
+        font: {
+          size: 14
+        }
+      })
+    })
   }
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
+  
+  public keyPressed: boolean = false
+  @HostListener('document:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) { 
+    this.keyPressed = true
+  }
+  @HostListener('document:keyup', ['$event'])
+  handleKeyup(event: KeyboardEvent) { 
+    this.keyPressed = false
+  }
 
   public annotations: Object[] = []
+  public monthAnnotations: Object[] = []
   public data = populationData
   public monthData = populationMonthData
   public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
@@ -65,6 +92,52 @@ export class PopulationComponent implements OnInit {
         beginAtZero: true,
       },
       x: {
+        min: this.labels.length - 2,
+        max: this.labels.length - 1,
+        grid: {
+          display: false
+        },
+      },
+    },
+    layout: {
+      padding: {
+        top: 20
+      }
+    },
+    plugins: {
+      annotation: {
+        annotations: this.annotations
+      },
+      legend: {
+        display: false,
+        align: "start"
+      },
+      datalabels: {
+        labels: {
+          title: {
+            color: 'white'
+          }
+        },
+        anchor: 'center',
+      }
+    }
+  };
+  public monthChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    scales: {
+      y: {
+        display: false,
+        stacked: true,
+        stack: 'stack',
+        min: 0,
+      },
+      yB: {
+        display: false,
+        stacked: true,
+        stack: 'stack',
+        beginAtZero: true,
+      },
+      x: {
         min: 0,
         max: 1,
         grid: {
@@ -72,9 +145,14 @@ export class PopulationComponent implements OnInit {
         },
       },
     },
+    layout: {
+      padding: {
+        top: 20
+      }
+    },
     plugins: {
       annotation: {
-        annotations: this.annotations
+        annotations: this.monthAnnotations
       },
       legend: {
         display: false,
@@ -95,26 +173,31 @@ export class PopulationComponent implements OnInit {
     DataLabelsPlugin
   ];
 
+
+
   public scroll = (event: WheelEvent, chart: any) => {
-    // console.log(event);
-    // console.log(chart);
-    const dataLength = chart.chart.data.labels.length
-    
-    if(event.deltaY > 0) {
-      if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
-        chart.chart.config.options.scales.x.min = dataLength - 2
-        chart.chart.config.options.scales.x.max = dataLength - 1
-      } else {
-        chart.chart.config.options.scales.x.min += 1
-        chart.chart.config.options.scales.x.max += 1
-      }
-    } else if(event.deltaY < 0) {
-      if(chart.chart.config.options.scales.x.min <= 0) {
-        chart.chart.config.options.scales.x.min = 0
-        chart.chart.config.options.scales.x.max = 1
-      } else {
-        chart.chart.config.options.scales.x.min -= 1
-        chart.chart.config.options.scales.x.max -= 1
+    if(this.keyPressed) {
+
+      // console.log(event);
+      // console.log(chart);
+      const dataLength = chart.chart.data.labels.length
+      
+      if(event.deltaY > 0) {
+        if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
+          chart.chart.config.options.scales.x.min = dataLength - 2
+          chart.chart.config.options.scales.x.max = dataLength - 1
+        } else {
+          chart.chart.config.options.scales.x.min += 1
+          chart.chart.config.options.scales.x.max += 1
+        }
+      } else if(event.deltaY < 0) {
+        if(chart.chart.config.options.scales.x.min <= 0) {
+          chart.chart.config.options.scales.x.min = 0
+          chart.chart.config.options.scales.x.max = 1
+        } else {
+          chart.chart.config.options.scales.x.min -= 1
+          chart.chart.config.options.scales.x.max -= 1
+        }
       }
     }
     chart.update()

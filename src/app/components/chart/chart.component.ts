@@ -1,5 +1,5 @@
 import { currencyData, currencyMonthData } from './../../data/data';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
@@ -22,6 +22,15 @@ export class ChartComponent implements OnInit {
     
   }
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
+  public keyPressed: boolean = false
+  @HostListener('document:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) { 
+    this.keyPressed = true
+  }
+  @HostListener('document:keyup', ['$event'])
+  handleKeyup(event: KeyboardEvent) { 
+    this.keyPressed = false
+  }
 
   public data = currencyData
   public monthData = currencyMonthData
@@ -36,8 +45,55 @@ export class ChartComponent implements OnInit {
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
+    scales: {
+      
+      x: {
+        min: this.labels.length - 2,
+        max: this.labels.length - 1,
+        stacked: true,
+        grid: {
+          display: false
+        }
+      },
+      y: {
+        display: false,
+        stacked: true,
+      }
+    },
+    layout: {
+      padding: {
+        top: 30
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+        align: "start"
+      },
+      datalabels: {
+        labels: {
+          title: {
+            color: 'white'
+          }
+        },
+        anchor: 'center',
+        formatter: (value, context) => {
 
-    // We use these empty structures as placeholders for dynamic theming.
+          const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
+            return datapoint.data[context.dataIndex]
+          })
+          function totalSum (total: any, datapoint: any) {
+            return total + datapoint
+          }
+          const sum = sumValue.reduce(totalSum,0)
+
+          return value < sum/10 ? "" : `${value}` ;
+        }
+      }
+    }
+  };
+  public monthChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
     scales: {
       
       x: {
@@ -52,6 +108,11 @@ export class ChartComponent implements OnInit {
         display: false,
         stacked: true,
       }
+    },
+    layout: {
+      padding: {
+        top: 30
+      },
     },
     plugins: {
       legend: {
@@ -86,28 +147,29 @@ export class ChartComponent implements OnInit {
   ];
 
   public scroll = (event: WheelEvent, chart: any) => {
-    // console.log(event);
-    // console.log(chart);
-    const dataLength = chart.chart.data.labels.length
-    
-    if(event.deltaY > 0) {
-      if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
-        chart.chart.config.options.scales.x.min = dataLength - 2
-        chart.chart.config.options.scales.x.max = dataLength - 1
-      } else {
-        chart.chart.config.options.scales.x.min += 1
-        chart.chart.config.options.scales.x.max += 1
+    if(this.keyPressed) {
+
+      const dataLength = chart.chart.data.labels.length
+      
+      if(event.deltaY > 0) {
+        if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
+          chart.chart.config.options.scales.x.min = dataLength - 2
+          chart.chart.config.options.scales.x.max = dataLength - 1
+        } else {
+          chart.chart.config.options.scales.x.min += 1
+          chart.chart.config.options.scales.x.max += 1
+        }
+      } else if(event.deltaY < 0) {
+        if(chart.chart.config.options.scales.x.min <= 0) {
+          chart.chart.config.options.scales.x.min = 0
+          chart.chart.config.options.scales.x.max = 1
+        } else {
+          chart.chart.config.options.scales.x.min -= 1
+          chart.chart.config.options.scales.x.max -= 1
+        }
       }
-    } else if(event.deltaY < 0) {
-      if(chart.chart.config.options.scales.x.min <= 0) {
-        chart.chart.config.options.scales.x.min = 0
-        chart.chart.config.options.scales.x.max = 1
-      } else {
-        chart.chart.config.options.scales.x.min -= 1
-        chart.chart.config.options.scales.x.max -= 1
-      }
+      chart.update()
     }
-    chart.update()
     
   }
 

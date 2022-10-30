@@ -8,6 +8,7 @@
     width: 100%;
     flex-wrap: wrap;    
     min-height: 50vh;
+    position: relative;
 
     
 
@@ -45,7 +46,10 @@
 
     .divider {
         // transform: translateY(-55px);
-        height: 85%;
+        position: absolute;
+        left: 49%;
+        bottom: 13%;
+        height: 50%;
         width: 0.1px;
         border-right: 3px dotted rgba(0, 0, 0, 0.351);
     }

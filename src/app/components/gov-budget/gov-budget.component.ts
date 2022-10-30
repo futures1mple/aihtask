@@ -1,5 +1,5 @@
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { govBudgetData, govBudgetMonthData } from 'src/app/data/data';
@@ -16,6 +16,15 @@ export class GovBudgetComponent implements OnInit {
   ngOnInit(): void {
   }
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
+  public keyPressed: boolean = false
+  @HostListener('document:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) { 
+    this.keyPressed = true
+  }
+  @HostListener('document:keyup', ['$event'])
+  handleKeyup(event: KeyboardEvent) { 
+    this.keyPressed = false
+  }
 
   public data = govBudgetData
   public monthData = govBudgetMonthData
@@ -30,6 +39,57 @@ export class GovBudgetComponent implements OnInit {
 
 
   public barChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    // We use these empty structures as placeholders for dynamic theming.
+    scales: {
+      y: {
+        display: false,
+        stack: 'stack',
+        stacked: true,
+      },
+      yL: {
+        display: false,
+        stacked: true,
+        stack: 'stack',
+        offset: true,
+      },
+      x: {
+        min: this.labels.length - 2,
+        max: this.labels.length - 1,
+        grid: {
+          display: false
+        },
+        
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+        align: "start"
+      },
+      datalabels: {
+        labels: {
+          title: {
+            color: 'white'
+          }
+        },
+        anchor: 'center',
+        formatter: (value, context) => {
+
+          const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
+            return datapoint.data[context.dataIndex]
+          })
+          function totalSum (total: any, datapoint: any) {
+            return total + datapoint
+          }
+          const sum = sumValue.reduce(totalSum,0)
+
+          return value < sum/10 ? "" : `${value}` ;
+        }
+      }
+    }
+  };
+  public monthChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.
     scales: {
@@ -65,6 +125,18 @@ export class GovBudgetComponent implements OnInit {
           }
         },
         anchor: 'center',
+        formatter: (value, context) => {
+
+          const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
+            return datapoint.data[context.dataIndex]
+          })
+          function totalSum (total: any, datapoint: any) {
+            return total + datapoint
+          }
+          const sum = sumValue.reduce(totalSum,0)
+
+          return value < sum/10 ? "" : `${value}` ;
+        }
       }
     }
   };
@@ -74,28 +146,29 @@ export class GovBudgetComponent implements OnInit {
   ];
 
   public scroll = (event: WheelEvent, chart: any) => {
-    // console.log(event);
-    // console.log(chart);
-    const dataLength = chart.chart.data.labels.length
-    
-    if(event.deltaY > 0) {
-      if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
-        chart.chart.config.options.scales.x.min = dataLength - 2
-        chart.chart.config.options.scales.x.max = dataLength - 1
-      } else {
-        chart.chart.config.options.scales.x.min += 1
-        chart.chart.config.options.scales.x.max += 1
+    if(this.keyPressed) {
+
+      const dataLength = chart.chart.data.labels.length
+      
+      if(event.deltaY > 0) {
+        if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
+          chart.chart.config.options.scales.x.min = dataLength - 2
+          chart.chart.config.options.scales.x.max = dataLength - 1
+        } else {
+          chart.chart.config.options.scales.x.min += 1
+          chart.chart.config.options.scales.x.max += 1
+        }
+      } else if(event.deltaY < 0) {
+        if(chart.chart.config.options.scales.x.min <= 0) {
+          chart.chart.config.options.scales.x.min = 0
+          chart.chart.config.options.scales.x.max = 1
+        } else {
+          chart.chart.config.options.scales.x.min -= 1
+          chart.chart.config.options.scales.x.max -= 1
+        }
       }
-    } else if(event.deltaY < 0) {
-      if(chart.chart.config.options.scales.x.min <= 0) {
-        chart.chart.config.options.scales.x.min = 0
-        chart.chart.config.options.scales.x.max = 1
-      } else {
-        chart.chart.config.options.scales.x.min -= 1
-        chart.chart.config.options.scales.x.max -= 1
-      }
+      chart.update()
     }
-    chart.update()
     
   }
 

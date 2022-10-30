@@ -204,5 +204,4 @@ export const grossProductMonthData = [
         line: true
     }
 ]
-Array.from({length: 9}, () => Math.floor(Math.random() * 10))
 
