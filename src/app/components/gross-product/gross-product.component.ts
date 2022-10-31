@@ -66,12 +66,16 @@ export class GrossProductComponent implements OnInit {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   public keyPressed: boolean = false
   @HostListener('document:keydown', ['$event'])
-  handleKeydown(event: KeyboardEvent) { 
-    this.keyPressed = true
+  handleKeydown(event: KeyboardEvent) {
+    if(event.key === 'Shift') { 
+      this.keyPressed = true
+    }
   }
   @HostListener('document:keyup', ['$event'])
   handleKeyup(event: KeyboardEvent) { 
-    this.keyPressed = false
+    if(event.key === 'Shift') { 
+      this.keyPressed = false
+    }
   }
 
 
