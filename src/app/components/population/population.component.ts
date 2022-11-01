@@ -23,12 +23,17 @@ export class PopulationComponent implements OnInit {
       this.annotations.push({
         type: 'label',
         xValue: index,
-        yValue: this.data[1].data[index]*2 + datapoint*2,
-        yScaleID: 'yB',
+        yValue: 1,
+        yScaleID: 'yS',
         backgroundColor: this.data[2].color,
         color: 'white',
         content: `${datapoint}`,
-        padding: 10,
+        padding: {
+          top: 8,
+          bottom: 8,
+          left: 20,
+          right: 20,
+        },
         font: {
           size: 14
         }
@@ -38,12 +43,17 @@ export class PopulationComponent implements OnInit {
       this.monthAnnotations.push({
         type: 'label',
         xValue: index,
-        yScaleID: 'yB',
-        yValue: this.monthData[1].data[index]*2 + datapoint*2,
+        yScaleID: 'yS',
+        yValue: 1,
         backgroundColor: this.monthData[2].color,
         color: 'white',
         content: `${datapoint}`,
-        padding: 10,
+        padding: {
+          top: 8,
+          bottom: 8,
+          left: 20,
+          right: 20,
+        },
         font: {
           size: 14
         }
@@ -67,7 +77,28 @@ export class PopulationComponent implements OnInit {
   }
 
   public annotations: Object[] = []
-  public monthAnnotations: Object[] = []
+  public monthAnnotations: Object[] = [
+    {
+      type: 'line',
+      xMin: -0.5,
+      xMax: -0.5,
+      borderDash: [5,5]
+    },
+    {
+      type: 'line',
+      xMin: -0.5,
+      xMax: -0.5,
+      yScaleID: 'yB',
+      borderDash: [5,5]
+    },
+    {
+      type: 'line',
+      xMin: -0.5,
+      xMax: -0.5,
+      yScaleID: 'yS',
+      borderDash: [5,5]
+    }
+  ]
   public data = populationData
   public monthData = populationMonthData
   public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
@@ -93,7 +124,14 @@ export class PopulationComponent implements OnInit {
         display: false,
         stacked: true,
         stack: 'stack',
+        offset:true,
         beginAtZero: true,
+      },
+      yS: {
+        display: false,
+        stacked: true,
+        stack: 'stack',
+        offset: true
       },
       x: {
         min: this.labels.length - 2,
@@ -138,8 +176,15 @@ export class PopulationComponent implements OnInit {
       yB: {
         display: false,
         stacked: true,
+        offset: true,
         stack: 'stack',
         beginAtZero: true,
+      },
+      yS: {
+        display: false,
+        stacked: true,
+        stack: 'stack',
+        offset: true
       },
       x: {
         min: 0,
@@ -169,6 +214,11 @@ export class PopulationComponent implements OnInit {
           }
         },
         anchor: 'center',
+        formatter: (value, context) => {
+
+
+          return value === 0 ? "" : `${value}` ;
+        }
       }
     }
   };
@@ -206,6 +256,27 @@ export class PopulationComponent implements OnInit {
     }
     chart.update()
     
+  }
+  public buttonScroll = (left: boolean, chart: any) => {
+    const dataLength = chart.chart.data.labels.length
+    if(!left) {
+      if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
+        chart.chart.config.options.scales.x.min = dataLength - 2
+        chart.chart.config.options.scales.x.max = dataLength - 1
+      } else {
+        chart.chart.config.options.scales.x.min += 1
+        chart.chart.config.options.scales.x.max += 1
+      }
+    } else {
+      if(chart.chart.config.options.scales.x.min <= 0) {
+        chart.chart.config.options.scales.x.min = 0
+        chart.chart.config.options.scales.x.max = 1
+      } else {
+      chart.chart.config.options.scales.x.min -= 1
+      chart.chart.config.options.scales.x.max -= 1
+      }
+    }
+    chart.update()
   }
 
   public barChartData: ChartData = {

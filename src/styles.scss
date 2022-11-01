@@ -1,3 +1,119 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.chart-component {
+    border: 1px solid rgba(200,213,238,255);
+    padding: 1rem 2rem;
+    width: 100%;
+    border-radius: 10px;
+    background-color: rgba(200,213,238,0.5);
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;    
+    min-height: 50vh;
+    position: relative;
+
+    
+    .legends-container {
+        margin-top: 0.7rem;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+
+        .legend {
+            margin: 0 1rem;
+            display: flex;
+            align-items: center;
+            .legend-square {
+                margin-right: 0.5rem;
+                width: 10px;
+                height: 10px;
+            }
+            .legend-square-line {
+                margin-right: 0.5rem;
+                width: 1rem;
+                border-top: 4px;
+                border-style: dotted;
+            }
+            .legend-label {
+                font-size: 0.9rem;
+                color: grey;
+            }
+        }
+    }
+
+    .title {
+        font-weight: bold;
+    }
+
+    .divider {
+        // transform: translateY(-55px);
+        position: absolute;
+        left: 49%;
+        bottom: 13%;
+        height: 50%;
+        width: 0.1px;
+        border-right: 3px dotted rgba(0, 0, 0, 0.351);
+    }
+
+    .charts-container {
+        display: flex;
+        width: 100%;
+        overflow-y: auto;
+
+        
+        
+        .chart {
+            width: 50%;
+            min-width: 180px !important;
+            display: flex;
+            
+            
+            .chart-canvas {
+                align-self: flex-end;
+            }
+        }
+        .chart-scroll {
+            width:250px; 
+            max-width: 250px;
+            overflow-x: scroll;
+        
+        
+            .chartBody {
+                width:  500px;
+                height: 100%;
+            }
+        }
+    }
+
+    .scroll-btn-container{
+        width: 100%;
+        display: flex;
+
+        .btn-container {
+            width: 50%;
+            display: flex;
+            justify-content: space-between;
+
+            .btn {
+                background-color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                cursor: pointer;
+                transition: .3s ease-in-out;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.804);
+                }
+            }
+
+            
+        }
+    }
+
+}

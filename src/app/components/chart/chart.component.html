@@ -24,8 +24,7 @@
             >
             </canvas>
         </div>
-        <div class="divider"></div>
-        <div class="chart">
+        <div class="chart second-chart">
             <canvas 
             class="chart-canvas"
             baseChart
@@ -36,6 +35,12 @@
             [plugins]="barChartPlugins"
             >
             </canvas>
+        </div>
+    </div>
+    <div class="scroll-btn-container">
+        <div class="btn-container">
+            <div class="btn" (click)="buttonScroll(true , chart)"> < </div>
+            <div class="btn" (click)="buttonScroll(false , chart)"> > </div>
         </div>
     </div>
 </div>

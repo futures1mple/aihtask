@@ -14,29 +14,34 @@
 
         <div class="chart">
             <canvas 
-            class="chart-canvas"
-            baseChart
-            height="300px"
-            [data]="barChartData"
-            [options]="barChartOptions"
-            [type]="barChartType"
-            [plugins]="barChartPlugins"
-            (wheel)="scroll($event, chart)"
+                class="chart-canvas"
+                baseChart
+                height="300px"
+                [data]="barChartData"
+                [options]="barChartOptions"
+                [type]="barChartType"
+                [plugins]="barChartPlugins"
+                (wheel)="scroll($event, chart)"
             >
             </canvas>
         </div>
-        <div class="divider"></div>
-        <div class="chart">
+        <div class="chart second-chart">
             <canvas 
-            class="chart-canvas"
-            baseChart
-            height="300px"
-            [data]="monthChartData"
-            [options]="monthChartOptions"
-            [type]="barChartType"
-            [plugins]="barChartPlugins"
+                class="chart-canvas"
+                baseChart
+                height="300px"
+                [data]="monthChartData"
+                [options]="monthChartOptions"
+                [type]="barChartType"
+                [plugins]="barChartPlugins"
             >
             </canvas>
+        </div>
+    </div>
+    <div class="scroll-btn-container">
+        <div class="btn-container">
+            <div class="btn" (click)="buttonScroll(true , chart)"> < </div>
+            <div class="btn" (click)="buttonScroll(false , chart)"> > </div>
         </div>
     </div>
 </div>

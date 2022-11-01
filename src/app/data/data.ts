@@ -131,14 +131,8 @@ export const currencyMonthData = [
 export const grossProductData = [
     {
         data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
-        label: 'Other',
-        color: 'rgba(142,189,100,255)',
-        line: false
-    },
-    {
-        data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
-        label:'ItAndTelecom',
-        color: 'rgba(95,155,216,255)',
+        label: 'Construction',
+        color: 'rgba(67,188,180,255)',
         line: false
     },
     {
@@ -149,14 +143,14 @@ export const grossProductData = [
     },
     {
         data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
-        label: 'Construction',
-        color: 'rgba(67,188,180,255)',
+        label:'ItAndTelecom',
+        color: 'rgba(95,155,216,255)',
         line: false
     },
     {
         data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
-        label: 'Per Capita',
-        color: 'rgba(125,151,181,255)',
+        label: 'Other',
+        color: 'rgba(142,189,100,255)',
         line: false
     },
     {
@@ -164,19 +158,19 @@ export const grossProductData = [
         label: 'Non-oil',
         color: 'rgba(226,120,112,255)',
         line: true
-    }
+    },
+    {
+        data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+        label: 'Per Capita',
+        color: 'rgba(125,151,181,255)',
+        line: false
+    },
 ]
 export const grossProductMonthData = [
     {
         data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
-        label: 'Other',
-        color: 'rgba(142,189,100,255)',
-        line: false
-    },
-    {
-        data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
-        label:'ItAndTelecom',
-        color: 'rgba(95,155,216,255)',
+        label: 'Construction',
+        color: 'rgba(67,188,180,255)',
         line: false
     },
     {
@@ -187,14 +181,14 @@ export const grossProductMonthData = [
     },
     {
         data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
-        label: 'Construction',
-        color: 'rgba(67,188,180,255)',
+        label:'ItAndTelecom',
+        color: 'rgba(95,155,216,255)',
         line: false
     },
     {
         data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
-        label: 'Per Capita',
-        color: 'rgba(125,151,181,255)',
+        label: 'Other',
+        color: 'rgba(142,189,100,255)',
         line: false
     },
     {
@@ -202,6 +196,12 @@ export const grossProductMonthData = [
         label: 'Non-oil',
         color: 'rgba(226,120,112,255)',
         line: true
-    }
+    },
+    {
+        data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+        label: 'Per Capita',
+        color: 'rgba(125,151,181,255)',
+        line: false
+    },
 ]
 

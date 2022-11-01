@@ -119,6 +119,16 @@ export class ChartComponent implements OnInit {
       },
     },
     plugins: {
+      annotation: {
+        annotations: [
+          { 
+            type: 'line',
+            xMin: -0.5,
+            xMax: -0.5,
+            borderDash: [5,5]
+          }
+        ]
+      },
       legend: {
         display: false,
         align: "start"
@@ -177,6 +187,28 @@ export class ChartComponent implements OnInit {
     
   }
 
+  public buttonScroll = (left: boolean, chart: any) => {
+    const dataLength = chart.chart.data.labels.length
+    if(!left) {
+      if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
+        chart.chart.config.options.scales.x.min = dataLength - 2
+        chart.chart.config.options.scales.x.max = dataLength - 1
+      } else {
+        chart.chart.config.options.scales.x.min += 1
+        chart.chart.config.options.scales.x.max += 1
+      }
+    } else {
+      if(chart.chart.config.options.scales.x.min <= 0) {
+        chart.chart.config.options.scales.x.min = 0
+        chart.chart.config.options.scales.x.max = 1
+      } else {
+      chart.chart.config.options.scales.x.min -= 1
+      chart.chart.config.options.scales.x.max -= 1
+      }
+    }
+    chart.update()
+  }
+
   public barChartData: ChartData = {
     labels: this.labels,
     datasets: [
@@ -212,9 +244,6 @@ export class ChartComponent implements OnInit {
       }
     ],
   };
-
-
-
 
   public mounthChartData : ChartData = {
     labels: this.mounthLabels,

@@ -17,45 +17,41 @@ export class GrossProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sum.map((data, index) => {
-      this.data.map((data1, index1) => {
-        if(index1 != 4) {
-          this.sum[index] += data1.data[index]
-        }
-      })
-    })
-    this.data[4].data.forEach((datapoint, index) => {
+    this.data[5].data.forEach((datapoint, index) => {
       this.annotations.push({
         type: 'label',
         xValue: index,
-        yValue: this.sum[index] + 5.5,
-        backgroundColor: this.data[4].color,
+        yValue: 1,
+        yScaleID: 'yS',
+        backgroundColor: this.data[5].color,
         color: 'white',
         content: `${datapoint}`,
-        padding: 10,
+        padding: {
+          top: 8,
+          bottom: 8,
+          left: 20,
+          right: 20,
+        },
         font: {
           size: 14
         }
       })
     })
-
-
-    this.monthSum.map((data, index) => {
-      this.monthData.map((data1, index1) => {
-        if(index1 != 4) {
-          this.monthSum[index] += data1.data[index]
-        }
-      })
-    })
-    this.monthData[4].data.forEach((datapoint, index) => {
+    this.monthData[5].data.forEach((datapoint, index) => {
       this.monthAnnotations.push({
         type: 'label',
         xValue: index,
-        yValue: this.monthSum[index] + 5.5,
-        backgroundColor: this.monthData[4].color,
+        yValue: 1,
+        yScaleID: 'yS',
+        backgroundColor: this.monthData[5].color,
         color: 'white',
         content: `${datapoint}`,
-        padding: 10,
+        padding: {
+          top: 8,
+          bottom: 8,
+          left: 20,
+          right: 20,
+        },
         font: {
           size: 14
         }
@@ -85,7 +81,21 @@ export class GrossProductComponent implements OnInit {
   public data = grossProductData
 
   public annotations: Object[] = []
-  public monthAnnotations: Object[] = []
+  public monthAnnotations: Object[] = [
+    {
+      type: 'line',
+      xMin: -0.5,
+      xMax: -0.5,
+      borderDash: [5,5]
+    },
+    {
+      type: 'line',
+      xMin: -0.5,
+      xMax: -0.5,
+      yScaleID: 'yS',
+      borderDash: [5,5]
+    },
+  ]
 
   public monthData = grossProductMonthData
   public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
@@ -102,7 +112,18 @@ export class GrossProductComponent implements OnInit {
 
     // We use these empty structures as placeholders for dynamic theming.
     scales: {
-      
+      y: {
+        display: false,
+        stacked: true,
+        stack: 'stack',
+      },
+      yS: {
+        display: false,
+        stacked: true,
+        stack: 'stack',
+        offset: true,
+        beginAtZero: true,
+      },
       x: {
         min: 0,
         max: 1,
@@ -111,10 +132,6 @@ export class GrossProductComponent implements OnInit {
           display: false
         }
       },
-      y: {
-        display: false,
-        stacked: true,
-      }
     },
     layout: {
       padding: {
@@ -123,7 +140,7 @@ export class GrossProductComponent implements OnInit {
     },
     plugins: {
       annotation: {
-        annotations: this.monthAnnotations
+        annotations: this.monthAnnotations,
       },
       legend: {
         display: false,
@@ -157,7 +174,18 @@ export class GrossProductComponent implements OnInit {
 
     // We use these empty structures as placeholders for dynamic theming.
     scales: {
-      
+      y: {
+        display: false,
+        stacked: true,
+        stack: 'stack',
+      },
+      yS: {
+        display: false,
+        stacked: true,
+        stack: 'stack',
+        offset: true,
+        beginAtZero: true,
+      },
       x: {
         min: this.labels.length - 2,
         max: this.labels.length - 1,
@@ -166,10 +194,6 @@ export class GrossProductComponent implements OnInit {
           display: false
         }
       },
-      y: {
-        display: false,
-        stacked: true,
-      }
     },
     layout: {
       padding: {
@@ -236,19 +260,41 @@ export class GrossProductComponent implements OnInit {
     
   }
 
+  public buttonScroll = (left: boolean, chart: any) => {
+    const dataLength = chart.chart.data.labels.length
+    if(!left) {
+      if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
+        chart.chart.config.options.scales.x.min = dataLength - 2
+        chart.chart.config.options.scales.x.max = dataLength - 1
+      } else {
+        chart.chart.config.options.scales.x.min += 1
+        chart.chart.config.options.scales.x.max += 1
+      }
+    } else {
+      if(chart.chart.config.options.scales.x.min <= 0) {
+        chart.chart.config.options.scales.x.min = 0
+        chart.chart.config.options.scales.x.max = 1
+      } else {
+      chart.chart.config.options.scales.x.min -= 1
+      chart.chart.config.options.scales.x.max -= 1
+      }
+    }
+    chart.update()
+  }
+
   public barChartData: ChartData = {
     labels: this.labels,
     datasets: [
       { 
-        data: this.data[5].data, 
+        data: this.data[4].data, 
         type: 'line', 
-        label: this.data[5].label, 
-        backgroundColor: this.data[5].color, 
-        borderColor: this.data[5].color,
-        pointBackgroundColor: this.data[5].color,
-        pointBorderColor: this.data[5].color,
+        label: this.data[4].label, 
+        backgroundColor: this.data[4].color, 
+        borderColor: this.data[4].color,
+        pointBackgroundColor: this.data[4].color,
+        pointBorderColor: this.data[4].color,
         pointStyle: 'rect',
-        borderDash: [10,5],
+        borderDash: [5,5],
         datalabels: {
           labels: {
             
@@ -298,13 +344,13 @@ export class GrossProductComponent implements OnInit {
     labels: this.mounthLabels,
     datasets: [
       { 
-        data: this.monthData[5].data, 
+        data: this.monthData[4].data, 
         type: 'line', 
-        label: this.monthData[5].label, 
-        backgroundColor: this.monthData[5].color, 
-        borderColor: this.monthData[5].color,
-        pointBackgroundColor: this.monthData[5].color,
-        pointBorderColor: this.monthData[5].color,
+        label: this.monthData[4].label, 
+        backgroundColor: this.monthData[4].color, 
+        borderColor: this.monthData[4].color,
+        pointBackgroundColor: this.monthData[4].color,
+        pointBorderColor: this.monthData[4].color,
         pointStyle: 'rect',
         borderDash: [10,5],
         datalabels: {

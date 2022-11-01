@@ -118,6 +118,23 @@ export class GovBudgetComponent implements OnInit {
       },
     },
     plugins: {
+      annotation: {
+        annotations: [
+          {
+            type: 'line',
+            xMin: -0.5,
+            xMax: -0.5,
+            borderDash: [5,5]
+          },
+          {
+            type: 'line',
+            xMin: -0.5,
+            xMax: -0.5,
+            borderDash: [5,5],
+            yScaleID: 'yL'
+          }
+        ]
+      },
       legend: {
         display: false,
         align: "start"
@@ -175,6 +192,27 @@ export class GovBudgetComponent implements OnInit {
     }
     
   }
+  public buttonScroll = (left: boolean, chart: any) => {
+    const dataLength = chart.chart.data.labels.length
+    if(!left) {
+      if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
+        chart.chart.config.options.scales.x.min = dataLength - 2
+        chart.chart.config.options.scales.x.max = dataLength - 1
+      } else {
+        chart.chart.config.options.scales.x.min += 1
+        chart.chart.config.options.scales.x.max += 1
+      }
+    } else {
+      if(chart.chart.config.options.scales.x.min <= 0) {
+        chart.chart.config.options.scales.x.min = 0
+        chart.chart.config.options.scales.x.max = 1
+      } else {
+      chart.chart.config.options.scales.x.min -= 1
+      chart.chart.config.options.scales.x.max -= 1
+      }
+    }
+    chart.update()
+  }
 
   public barChartData: ChartData = {
     labels: this.labels,
@@ -208,7 +246,7 @@ export class GovBudgetComponent implements OnInit {
             title: {
               textStrokeColor:'grey',
               borderColor: 'grey',
-              align: 'top',
+              align: 'bottom',
               color: 'black'
             }
           }
@@ -269,7 +307,7 @@ export class GovBudgetComponent implements OnInit {
             title: {
               textStrokeColor:'grey',
               borderColor: 'grey',
-              align: 'top',
+              align: 'bottom',
               color: 'black'
             }
           }
