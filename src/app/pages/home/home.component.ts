@@ -9,17 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   data: ISummaryData 
-  loading: boolean = true
+  fetching: boolean = true
 
   constructor(
     private dataService: DataService
   ) {}
 
     getData() {
-      this.loading = true
+      this.fetching = true
       this.dataService.getData().subscribe( data => {
         this.data = data
-        this.loading = false
+        this.fetching = false
         console.log(this.data.grossProduct.years.data);
       })
     }
