@@ -17,37 +17,37 @@ export class InMemoryDataService implements InMemoryDbService {
           labels: [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ],
           data: [
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)/100),
               label: 'Construction',
               color: 'rgba(67,188,180,255)',
               line: false
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 5000)/100),
               label: 'Agriculture',
               color: 'rgba(253,192,0,255)',
               line: false
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)/100),
               label:'ItAndTelecom',
               color: 'rgba(95,155,216,255)',
               line: false
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 5000)/100),
               label: 'Other',
               color: 'rgba(142,189,100,255)',
               line: false
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 5000)/100),
               label: 'Non-oil',
               color: 'rgba(226,120,112,255)',
               line: true
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)),
               label: 'Per Capita',
               color: 'rgba(125,151,181,255)',
               line: false
@@ -58,37 +58,37 @@ export class InMemoryDataService implements InMemoryDbService {
           labels:[ `${this.monthLabels[this.date.getMonth()].substring(0,3)} - ${this.date.getFullYear() - 1}` , `${this.monthLabels[this.date.getMonth()].substring(0,3)} - ${this.date.getFullYear()}`],
           data: [
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000) / 100),
               label: 'Construction',
               color: 'rgba(67,188,180,255)',
               line: false
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 5000) /100),
               label: 'Agriculture',
               color: 'rgba(253,192,0,255)',
               line: false
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000) / 100),
               label:'ItAndTelecom',
               color: 'rgba(95,155,216,255)',
               line: false
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 5000) / 100),
               label: 'Other',
               color: 'rgba(142,189,100,255)',
               line: false
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 5000) / 100),
               label: 'Non-oil',
               color: 'rgba(226,120,112,255)',
               line: true
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000)),
               label: 'Per Capita',
               color: 'rgba(125,151,181,255)',
               line: false
@@ -101,25 +101,25 @@ export class InMemoryDataService implements InMemoryDbService {
           labels: [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ],
           data: [
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)/100),
               label: 'Income',
               color: 'rgba(52,125,160,255)',
               line: false
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)/100),
               label:'Spending',
               color: 'rgba(226,120,112,255)',
               line: false
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)/100),
               label: 'Export',
               color: 'red',
               line: true
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)/100),
               label: 'Import',
               color: 'green',
               line: true
@@ -130,25 +130,25 @@ export class InMemoryDataService implements InMemoryDbService {
           labels: [ `${this.monthLabels[this.date.getMonth()].substring(0,3)} - ${this.date.getFullYear() - 1}` , `${this.monthLabels[this.date.getMonth()].substring(0,3)} - ${this.date.getFullYear()}`],
           data: [
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000)/100),
               label: 'Income',
               color: 'rgba(52,125,160,255)',
               line: false
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000)/100),
               label:'Spending',
               color: 'rgba(226,120,112,255)',
               line: false
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000)/100),
               label: 'Export',
               color: 'red',
               line: true
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000)/100),
               label: 'Import',
               color: 'green',
               line: true
@@ -161,19 +161,19 @@ export class InMemoryDataService implements InMemoryDbService {
           labels: [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ],
           data: [
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 30)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)/100),
               label: 'Sofaz',
               color: 'rgba(52,125,160,255)',
               line: false
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 20)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)/100),
               label:'Cbar',
               color: 'rgba(226,120,112,255)',
               line: false
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 5000)/100),
               label: 'Mof',
               color: 'rgba(67,188,180,255)',
               line: false
@@ -184,19 +184,19 @@ export class InMemoryDataService implements InMemoryDbService {
           labels: [ `${this.monthLabels[this.date.getMonth()].substring(0,3)} - ${this.date.getFullYear() - 1}` , `${this.monthLabels[this.date.getMonth()].substring(0,3)} - ${this.date.getFullYear()}`],
           data: [
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 30)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000)/100),
               label: 'Sofaz',
               color: 'rgba(52,125,160,255)',
               line: false
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 20)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000)/100),
               label:'Cbar',
               color: 'rgba(226,120,112,255)',
               line: false
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 5000)/100),
               label: 'Mof',
               color: 'rgba(67,188,180,255)',
               line: false
@@ -209,19 +209,19 @@ export class InMemoryDataService implements InMemoryDbService {
           labels: [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ],
           data: [
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 100)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 1000)),
               label: 'Unemployed (k)',
               color: 'rgba(52,125,160,255)',
               line: false
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 100)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 10000)),
               label:'Workforce (k)',
               color: 'rgba(226,120,112,255)',
               line: true,
             },
             {
-              data: Array.from({length: 9}, () => Math.floor(Math.random() * 100)),
+              data: Array.from({length: 9}, () => Math.floor(Math.random() * 1000)),
               label: 'Salary(₼)',
               color: 'rgba(125,151,181,255)',
               line: false,
@@ -232,19 +232,19 @@ export class InMemoryDataService implements InMemoryDbService {
           labels: [ `${this.monthLabels[this.date.getMonth()].substring(0,3)} - ${this.date.getFullYear() - 1}` , `${this.monthLabels[this.date.getMonth()].substring(0,3)} - ${this.date.getFullYear()}`],
           data: [
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 100)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 1000)),
               label: 'Unemployed (k)',
               color: 'rgba(52,125,160,255)',
               line: false
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 100)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 10000)),
               label:'Workforce (k)',
               color: 'rgba(226,120,112,255)',
               line: true,
             },
             {
-              data: Array.from({length: 2}, () => Math.floor(Math.random() * 100)),
+              data: Array.from({length: 2}, () => Math.floor(Math.random() * 1000)),
               label: 'Salary(₼)',
               color: 'rgba(125,151,181,255)',
               line: false,

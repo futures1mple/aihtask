@@ -2,7 +2,6 @@ import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { govBudgetData, govBudgetMonthData } from 'src/app/data/data';
 import { IData, IOneData } from 'src/app/models/data';
 
 @Component({
@@ -85,13 +84,8 @@ export class GovBudgetComponent implements OnInit {
     }
   }
 
-  // public data = govBudgetData
-  // public monthData = govBudgetMonthData
-
-
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
     scales: {
       y: {
         display: false,

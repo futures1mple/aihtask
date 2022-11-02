@@ -4,8 +4,6 @@ import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core
 import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import {default as Annotation} from 'chartjs-plugin-annotation';
-import { grossProductMonthData, grossProductData } from 'src/app/data/data';
-import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-gross-product',
@@ -390,7 +388,7 @@ export class GrossProductComponent implements OnInit {
             }
             const sum = sumValue.reduce(totalSum,0)
 
-            return sum ;
+            return Math.floor(sum * 100) / 100 ;
           }
         },
         label: '',
@@ -447,7 +445,7 @@ export class GrossProductComponent implements OnInit {
             }
             const sum = sumValue.reduce(totalSum,0)
 
-            return sum ;
+            return Math.floor(sum * 100) / 100 ;
           }
         },
         label: '',

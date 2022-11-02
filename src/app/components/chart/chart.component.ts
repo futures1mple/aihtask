@@ -1,5 +1,4 @@
 import { IData, IOneData } from './../../models/data';
-import { currencyData, currencyMonthData } from './../../data/data';
 import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
@@ -17,6 +16,7 @@ export class ChartComponent implements OnInit {
 
   data: IOneData | null = null
   monthData: IOneData | null = null
+
   sofaz: IData = {
     data: [],
     month: [],
@@ -52,11 +52,10 @@ export class ChartComponent implements OnInit {
     })
     array.color = data.years.data[index].color
   }
-  constructor() {
 
+  constructor() {
   }
   
-
   ngOnInit(): void {
     this.data = this.adata
     this.data.years.labels.map((item: any) => {
@@ -69,6 +68,7 @@ export class ChartComponent implements OnInit {
     this.dataset(this.cbar, this.data, 1)
     this.dataset(this.mof, this.data, 2)
   }
+
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   public keyPressed: boolean = false
   @HostListener('document:keydown', ['$event'])
@@ -83,9 +83,6 @@ export class ChartComponent implements OnInit {
       this.keyPressed = false
     }
   }
-
-  // public data = currencyData
-  // public monthData = currencyMonthData
   
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -275,7 +272,7 @@ export class ChartComponent implements OnInit {
             }
             const sum = sumValue.reduce(totalSum,0)
 
-            return sum ;
+            return Math.floor(sum *100)/100 ;
           }
         },
         label: '',
@@ -311,7 +308,7 @@ export class ChartComponent implements OnInit {
             }
             const sum = sumValue.reduce(totalSum,0)
 
-            return sum ;
+            return Math.floor(sum *100)/100 ;
           }
         },
         label: '',

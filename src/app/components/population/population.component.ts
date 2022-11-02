@@ -1,8 +1,7 @@
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Chart,ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { populationData, populationMonthData } from 'src/app/data/data';
 
 import {default as Annotation} from 'chartjs-plugin-annotation';
 import { IData, IOneData } from 'src/app/models/data';
@@ -147,7 +146,6 @@ export class PopulationComponent implements OnInit {
       borderDash: [5,5]
     }
   ]
-  // public data = populationData
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
