@@ -1,9 +1,11 @@
+import { IData, IOneData } from './../../models/data';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import {default as Annotation} from 'chartjs-plugin-annotation';
 import { grossProductMonthData, grossProductData } from 'src/app/data/data';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-gross-product',
@@ -11,19 +13,76 @@ import { grossProductMonthData, grossProductData } from 'src/app/data/data';
   styleUrls: ['./gross-product.component.scss']
 })
 export class GrossProductComponent implements OnInit {
+  @Input('data') adata: IOneData 
+
+  data: IOneData | null = null
+  nonOil: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  construction: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  agriculture: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  itTelecom: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  other: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+
+  labelsSet: string[] =[]
+  monthLabelsSet: string[] =[]
 
   constructor() { 
     Chart.register(Annotation)
   }
 
+
   ngOnInit(): void {
-    this.data[5].data.forEach((datapoint, index) => {
+    this.data = this.adata
+
+    this.data.years.labels.map((item: any) => {
+      this.labelsSet.push(item)
+    })
+    this.data.month.labels.map((item: any) => {
+      this.monthLabelsSet.push(item)
+    })
+
+    this.dataset(this.construction, this.data, 0)
+    this.dataset(this.agriculture, this.data, 1)
+    this.dataset(this.itTelecom, this.data, 2)
+    this.dataset(this.other, this.data, 3)
+    this.dataset(this.nonOil, this.data, 4)
+
+    this.data?.years.data[5].data.forEach((datapoint: any, index: any) => {
       this.annotations.push({
         type: 'label',
         xValue: index,
         yValue: 1,
         yScaleID: 'yS',
-        backgroundColor: this.data[5].color,
+        backgroundColor: this.data?.years.data[5].color,
         color: 'white',
         content: `${datapoint}`,
         padding: {
@@ -37,13 +96,13 @@ export class GrossProductComponent implements OnInit {
         }
       })
     })
-    this.monthData[5].data.forEach((datapoint, index) => {
+    this.data?.month.data[5].data.forEach((datapoint: any, index: any) => {
       this.monthAnnotations.push({
         type: 'label',
         xValue: index,
         yValue: 1,
         yScaleID: 'yS',
-        backgroundColor: this.monthData[5].color,
+        backgroundColor: this.data?.month.data[5].color,
         color: 'white',
         content: `${datapoint}`,
         padding: {
@@ -57,6 +116,18 @@ export class GrossProductComponent implements OnInit {
         }
       })
     })
+
+    this.chart?.render()
+  }
+
+  dataset(array: any, data: any, index: number){
+    data.month.data[index].data.map((item: any) => {
+      array.month.push(item)
+    })
+    data.years.data[index].data.map((item: any) => {
+      array.data.push(item)
+    })
+    array.color = data.years.data[index].color
   }
 
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
@@ -78,7 +149,6 @@ export class GrossProductComponent implements OnInit {
   public sum: number[] = [0,0,0,0,0,0,0,0,0]
   public monthSum: number[] = [0,0,0,0,0,0,0,0,0]
 
-  public data = grossProductData
 
   public annotations: Object[] = []
   public monthAnnotations: Object[] = [
@@ -97,16 +167,7 @@ export class GrossProductComponent implements OnInit {
     },
   ]
 
-  public monthData = grossProductMonthData
-  public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
-  private monthLabels = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-  private d = new Date();
-  private month = this.d.getMonth()
-  private year = this.d.getFullYear()
-
-  public mounthLabels = [ `${this.monthLabels[this.month].substring(0,3)} - ${this.year - 1}` , `${this.monthLabels[this.month].substring(0,3)} - ${this.year}`]
-
+  
   public monthChartOptions: ChartConfiguration['options'] = {
     responsive: true,
 
@@ -187,8 +248,8 @@ export class GrossProductComponent implements OnInit {
         beginAtZero: true,
       },
       x: {
-        min: this.labels.length - 2,
-        max: this.labels.length - 1,
+        min: 7,
+        max: 8,
         stacked: true,
         grid: {
           display: false
@@ -283,21 +344,20 @@ export class GrossProductComponent implements OnInit {
   }
 
   public barChartData: ChartData = {
-    labels: this.labels,
+    labels: this.labelsSet,
     datasets: [
       { 
-        data: this.data[4].data, 
+        data: this.nonOil.data , 
         type: 'line', 
-        label: this.data[4].label, 
-        backgroundColor: this.data[4].color, 
-        borderColor: this.data[4].color,
-        pointBackgroundColor: this.data[4].color,
-        pointBorderColor: this.data[4].color,
+        label: "Non-oil",
+        backgroundColor: () => this.nonOil.color, 
+        borderColor: () => this.nonOil.color, 
+        pointBackgroundColor: () => this.nonOil.color, 
+        pointBorderColor: () => this.nonOil.color, 
         pointStyle: 'rect',
         borderDash: [5,5],
         datalabels: {
           labels: {
-            
             title: {
               display: false,
               color: 'black',
@@ -306,11 +366,10 @@ export class GrossProductComponent implements OnInit {
           }
         }
       },
-      { data: this.data[0].data, barPercentage: 0.5, label: this.data[0].label, backgroundColor: this.data[0].color },
-      { data: this.data[1].data, barPercentage: 0.5, label: this.data[1].label, backgroundColor: this.data[1].color },
-      { data: this.data[2].data, barPercentage: 0.5, label: this.data[2].label, backgroundColor: this.data[2].color },
-      { data: this.data[3].data, barPercentage: 0.5, label: this.data[3].label, backgroundColor: this.data[3].color },
-      // { data: this.data[4].data, barThickness: 80, label: this.data[4].label, backgroundColor: this.data[4].color },
+      { data: this.construction.data, barPercentage: 0.5, label: 'Construction', backgroundColor: () => this.construction.color },
+      { data: this.agriculture.data, barPercentage: 0.5, label: 'Agriculture', backgroundColor: () => this.agriculture.color },
+      { data: this.itTelecom.data, barPercentage: 0.5, label: 'It and Telecom', backgroundColor: () => this.itTelecom.color },
+      { data: this.other.data, barPercentage: 0.5, label: 'Other', backgroundColor: () => this.other.color },
       { 
         data: [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
         
@@ -341,21 +400,21 @@ export class GrossProductComponent implements OnInit {
     ],
   };
   public monthChartData: ChartData = {
-    labels: this.mounthLabels,
+    labels: this.monthLabelsSet,
     datasets: [
+      
       { 
-        data: this.monthData[4].data, 
+        data: this.nonOil.month , 
         type: 'line', 
-        label: this.monthData[4].label, 
-        backgroundColor: this.monthData[4].color, 
-        borderColor: this.monthData[4].color,
-        pointBackgroundColor: this.monthData[4].color,
-        pointBorderColor: this.monthData[4].color,
+        label: 'Non-oil',
+        backgroundColor: () => this.nonOil.color, 
+        borderColor: () => this.nonOil.color, 
+        pointBackgroundColor: () => this.nonOil.color, 
+        pointBorderColor: () => this.nonOil.color, 
         pointStyle: 'rect',
-        borderDash: [10,5],
+        borderDash: [5,5],
         datalabels: {
           labels: {
-            
             title: {
               display: false,
               color: 'black',
@@ -364,10 +423,10 @@ export class GrossProductComponent implements OnInit {
           }
         }
       },
-      { data: this.monthData[0].data, barPercentage: 0.5, label: this.monthData[0].label, backgroundColor: this.monthData[0].color },
-      { data: this.monthData[1].data, barPercentage: 0.5, label: this.monthData[1].label, backgroundColor: this.monthData[1].color },
-      { data: this.monthData[2].data, barPercentage: 0.5, label: this.monthData[2].label, backgroundColor: this.monthData[2].color },
-      { data: this.monthData[3].data, barPercentage: 0.5, label: this.monthData[3].label, backgroundColor: this.monthData[3].color },
+      { data: this.construction.month, barPercentage: 0.5, label: 'Construction', backgroundColor: () => this.construction.color },
+      { data: this.agriculture.month, barPercentage: 0.5, label: 'Agriculture', backgroundColor: () => this.agriculture.color },
+      { data: this.itTelecom.month, barPercentage: 0.5, label: 'It and Telecom', backgroundColor: () => this.itTelecom.color },
+      { data: this.other.month, barPercentage: 0.5, label: 'Other', backgroundColor: () => this.other.color },
       { 
         data: [ 0, 0 ], 
         

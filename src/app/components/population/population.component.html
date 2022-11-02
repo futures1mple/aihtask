@@ -1,7 +1,7 @@
 <div class="chart-component" >
     <label style="width: 100%;"><span class="title">Population</span></label>
     <div class="legends-container">
-        <div class="" *ngFor="let legend of this.data">
+        <div class="" *ngFor="let legend of this.data?.years?.data">
             <div class="legend">
                 <div *ngIf="!legend.line" class="legend-square" [ngStyle]="{'backgroundColor': legend.color}"></div>
                 <div *ngIf="legend.line" class="legend-square-line" [ngStyle]="{'borderColor':legend.color }"></div>

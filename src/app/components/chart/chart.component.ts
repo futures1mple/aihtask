@@ -1,5 +1,6 @@
+import { IData, IOneData } from './../../models/data';
 import { currencyData, currencyMonthData } from './../../data/data';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
@@ -12,14 +13,61 @@ import DataLabelsPlugin from 'chartjs-plugin-datalabels';
   styleUrls: ['./chart.component.scss']
 })
 export class ChartComponent implements OnInit {
+  @Input('data') adata: IOneData 
 
+  data: IOneData | null = null
+  monthData: IOneData | null = null
+  sofaz: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  cbar: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  mof: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: true
+  }
+
+  labelsSet: string[] =[]
+  monthLabelsSet: string[] =[]
+
+  dataset(array: IData, data: any, index: number){
+
+    data.month.data[index].data.map((item: any) => {
+      array.month.push(item)
+    })
+    data.years.data[index].data.map((item: any) => {
+      array.data.push(item)
+    })
+    array.color = data.years.data[index].color
+  }
   constructor() {
 
   }
   
 
   ngOnInit(): void {
-    
+    this.data = this.adata
+    this.data.years.labels.map((item: any) => {
+      this.labelsSet.push(item)
+    })
+    this.data.month.labels.map((item: any) => {
+      this.monthLabelsSet.push(item)
+    })
+    this.dataset(this.sofaz, this.data, 0)
+    this.dataset(this.cbar, this.data, 1)
+    this.dataset(this.mof, this.data, 2)
   }
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   public keyPressed: boolean = false
@@ -36,24 +84,16 @@ export class ChartComponent implements OnInit {
     }
   }
 
-  public data = currencyData
-  public monthData = currencyMonthData
-  public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
-  private monthLabels = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-  private d = new Date();
-  private month = this.d.getMonth()
-  private year = this.d.getFullYear()
-
-  public mounthLabels = [ `${this.monthLabels[this.month].substring(0,3)} - ${this.year - 1}` , `${this.monthLabels[this.month].substring(0,3)} - ${this.year}`]
-
+  // public data = currencyData
+  // public monthData = currencyMonthData
+  
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     scales: {
       
       x: {
-        min: this.labels.length - 2,
-        max: this.labels.length - 1,
+        min: 7,
+        max: 8,
         stacked: true,
         grid: {
           display: false
@@ -210,11 +250,11 @@ export class ChartComponent implements OnInit {
   }
 
   public barChartData: ChartData = {
-    labels: this.labels,
+    labels: this.labelsSet,
     datasets: [
-      { data: this.data[0].data, barPercentage: .5, label: this.data[0].label, backgroundColor: this.data[0].color },
-      { data: this.data[1].data, barPercentage: .5, label: this.data[1].label, backgroundColor: this.data[1].color },
-      { data: this.data[2].data, barPercentage: .5, label: this.data[2].label, backgroundColor: this.data[2].color },
+      { data: this.sofaz.data, barPercentage: .5, label: 'Sofaz', backgroundColor: () => this.sofaz.color },
+      { data: this.cbar.data, barPercentage: .5, label: 'Cbar', backgroundColor: () => this.cbar.color },
+      { data: this.mof.data, barPercentage: .5, label: 'Mof', backgroundColor: () => this.mof.color },
       { 
         data: [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
         
@@ -246,11 +286,11 @@ export class ChartComponent implements OnInit {
   };
 
   public mounthChartData : ChartData = {
-    labels: this.mounthLabels,
+    labels: this.monthLabelsSet,
     datasets: [
-      { data: this.monthData[0].data, barPercentage: .5, label: this.monthData[0].label, backgroundColor: this.monthData[0].color },
-      { data: this.monthData[1].data, barPercentage: .5, label: this.monthData[1].label, backgroundColor: this.monthData[1].color },
-      { data: this.monthData[2].data, barPercentage: .5, label: this.monthData[2].label, backgroundColor: this.monthData[2].color },
+      { data: this.sofaz.month, barPercentage: .5, label: 'Sofaz', backgroundColor: () => this.sofaz.color },
+      { data: this.sofaz.month, barPercentage: .5, label: 'Cbar', backgroundColor:() => this.cbar.color },
+      { data: this.sofaz.month, barPercentage: .5, label: 'Mof', backgroundColor:() => this.mof.color },
       { 
         data: [ 0, 0 ], 
         

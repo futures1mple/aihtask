@@ -1,10 +1,11 @@
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Chart,ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { populationData, populationMonthData } from 'src/app/data/data';
 
 import {default as Annotation} from 'chartjs-plugin-annotation';
+import { IData, IOneData } from 'src/app/models/data';
 
 @Component({
   selector: 'app-population',
@@ -12,20 +13,67 @@ import {default as Annotation} from 'chartjs-plugin-annotation';
   styleUrls: ['./population.component.scss']
 })
 export class PopulationComponent implements OnInit {
+  @Input('data') adata: IOneData 
 
+  data: IOneData | null = null
+  unemployed: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  workforce: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  salary: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: true
+  }
+
+  labelsSet: string[] =[]
+  monthLabelsSet: string[] =[]
+
+  dataset(array: IData, data: any, index: number){
+    data.month.data[index].data.map((item: any) => {
+      array.month.push(item)
+    })
+    data.years.data[index].data.map((item: any) => {
+      array.data.push(item)
+    })
+    array.color = data.years.data[index].color
+  }
   constructor() {
     Chart.register(Annotation)
   }
   
 
   ngOnInit(): void {
-    this.data[2].data.forEach((datapoint, index) => {
+    this.data = this.adata
+    this.data.years.labels.map((item: any) => {
+      this.labelsSet.push(item)
+    })
+    this.data.month.labels.map((item: any) => {
+      this.monthLabelsSet.push(item)
+    })
+    this.dataset(this.unemployed, this.data, 0)
+    this.dataset(this.workforce, this.data, 1)
+    this.dataset(this.salary, this.data, 2)
+
+    this.data?.years.data[2].data.forEach((datapoint, index) => {
       this.annotations.push({
         type: 'label',
         xValue: index,
         yValue: 1,
         yScaleID: 'yS',
-        backgroundColor: this.data[2].color,
+        backgroundColor: this.data?.years.data[2].color,
         color: 'white',
         content: `${datapoint}`,
         padding: {
@@ -39,13 +87,13 @@ export class PopulationComponent implements OnInit {
         }
       })
     })
-    this.monthData[2].data.forEach((datapoint, index) => {
+    this.data?.month.data[2].data.forEach((datapoint, index) => {
       this.monthAnnotations.push({
         type: 'label',
         xValue: index,
         yScaleID: 'yS',
         yValue: 1,
-        backgroundColor: this.monthData[2].color,
+        backgroundColor: this.data?.month.data[2].color,
         color: 'white',
         content: `${datapoint}`,
         padding: {
@@ -99,17 +147,7 @@ export class PopulationComponent implements OnInit {
       borderDash: [5,5]
     }
   ]
-  public data = populationData
-  public monthData = populationMonthData
-  public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
-  private monthLabels = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-  private d = new Date();
-  private month = this.d.getMonth()
-  private year = this.d.getFullYear()
-
-  public mounthLabels = [ `${this.monthLabels[this.month].substring(0,3)} - ${this.year - 1}` , `${this.monthLabels[this.month].substring(0,3)} - ${this.year}`]
-
+  // public data = populationData
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -134,8 +172,8 @@ export class PopulationComponent implements OnInit {
         offset: true
       },
       x: {
-        min: this.labels.length - 2,
-        max: this.labels.length - 1,
+        min: 7,
+        max: 8,
         grid: {
           display: false
         },
@@ -280,23 +318,23 @@ export class PopulationComponent implements OnInit {
   }
 
   public barChartData: ChartData = {
-    labels: this.labels,
+    labels: this.labelsSet,
     datasets: [
       { 
-        data: this.data[0].data, 
+        data: this.unemployed.data, 
         barPercentage: .5, 
-        label: this.data[0].label, 
-        backgroundColor: this.data[0].color,
+        label: "Unemployed (k)", 
+        backgroundColor: () => this.unemployed.color,
         type: 'bar',
       },
       { 
-        data: this.data[1].data, 
+        data: this.workforce.data, 
         yAxisID: 'yB',
-        label: this.data[1].label, 
-        borderColor: this.data[1].color, 
-        backgroundColor: this.data[1].color, 
-        pointBackgroundColor: this.data[1].color,
-        pointBorderColor: this.data[1].color,
+        label: 'Workforce (k)', 
+        borderColor: () => this.workforce.color, 
+        backgroundColor: () => this.workforce.color, 
+        pointBackgroundColor: () => this.workforce.color,
+        pointBorderColor: () => this.workforce.color,
         borderDash: [10,4],
         type: 'line',
         pointStyle: 'rect',
@@ -314,23 +352,23 @@ export class PopulationComponent implements OnInit {
     ],
   };
   public monthChartData: ChartData = {
-    labels: this.mounthLabels,
+    labels: this.monthLabelsSet,
     datasets: [
       { 
-        data: this.monthData[0].data, 
+        data: this.unemployed.month, 
         barPercentage: .5, 
-        label: this.monthData[0].label, 
-        backgroundColor: this.monthData[0].color,
+        label: 'Unemployed (k)', 
+        backgroundColor: () => this.unemployed.color,
         type: 'bar',
       },
       { 
-        data: this.monthData[1].data, 
+        data: this.workforce.month, 
         yAxisID: 'yB',
-        label: this.monthData[1].label, 
-        borderColor: this.monthData[1].color, 
-        backgroundColor: this.monthData[1].color, 
-        pointBackgroundColor: this.monthData[1].color,
-        pointBorderColor: this.monthData[1].color,
+        label: 'Workforce (k)', 
+        borderColor: () => this.workforce.color, 
+        backgroundColor: () => this.workforce.color, 
+        pointBackgroundColor: () => this.workforce.color,
+        pointBorderColor: () => this.workforce.color,
         borderDash: [10,4],
         type: 'line',
         pointStyle: 'rect',

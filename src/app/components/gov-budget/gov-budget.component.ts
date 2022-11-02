@@ -1,8 +1,9 @@
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { govBudgetData, govBudgetMonthData } from 'src/app/data/data';
+import { IData, IOneData } from 'src/app/models/data';
 
 @Component({
   selector: 'app-gov-budget',
@@ -10,10 +11,64 @@ import { govBudgetData, govBudgetMonthData } from 'src/app/data/data';
   styleUrls: ['./gov-budget.component.scss']
 })
 export class GovBudgetComponent implements OnInit {
+  @Input('data') adata: IOneData 
 
+  data: IOneData | null = null
+  income: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  spending: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: false
+  }
+  export: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: true
+  }
+  import: IData = {
+    data: [],
+    month: [],
+    color: '',
+    label: '',
+    line: true
+  }
+
+  labelsSet: string[] =[]
+  monthLabelsSet: string[] =[]
+
+  dataset(array: IData, data: any, index: number){
+    data.month.data[index].data.map((item: any) => {
+      array.month.push(item)
+    })
+    data.years.data[index].data.map((item: any) => {
+      array.data.push(item)
+    })
+    array.color = data.years.data[index].color
+  }
   constructor() { }
 
   ngOnInit(): void {
+    this.data = this.adata
+    this.data.years.labels.map((item: any) => {
+      this.labelsSet.push(item)
+    })
+    this.data.month.labels.map((item: any) => {
+      this.monthLabelsSet.push(item)
+    })
+    this.dataset(this.income, this.data, 0)
+    this.dataset(this.spending, this.data, 1)
+    this.dataset(this.export, this.data, 2)
+    this.dataset(this.import, this.data, 3)
   }
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
   public keyPressed: boolean = false
@@ -30,16 +85,8 @@ export class GovBudgetComponent implements OnInit {
     }
   }
 
-  public data = govBudgetData
-  public monthData = govBudgetMonthData
-  public labels = [ '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022' ]
-  private monthLabels = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-  private d = new Date();
-  private month = this.d.getMonth()
-  private year = this.d.getFullYear()
-
-  public mounthLabels = [ `${this.monthLabels[this.month].substring(0,3)} - ${this.year - 1}` , `${this.monthLabels[this.month].substring(0,3)} - ${this.year}`]
+  // public data = govBudgetData
+  // public monthData = govBudgetMonthData
 
 
   public barChartOptions: ChartConfiguration['options'] = {
@@ -58,8 +105,8 @@ export class GovBudgetComponent implements OnInit {
         offset: true,
       },
       x: {
-        min: this.labels.length - 2,
-        max: this.labels.length - 1,
+        min: 7,
+        max: 8,
         grid: {
           display: false
         },
@@ -215,29 +262,29 @@ export class GovBudgetComponent implements OnInit {
   }
 
   public barChartData: ChartData = {
-    labels: this.labels,
+    labels: this.labelsSet,
     datasets: [
       { 
-        data: this.data[0].data, 
-        label: this.data[0].label, 
-        backgroundColor: this.data[0].color,
+        data: this.income.data, 
+        label: 'Income', 
+        backgroundColor: () => this.income.color,
         stack: 'combined',
       },
       { 
-        data: this.data[1].data, 
-        label: this.data[1].label, 
-        backgroundColor: this.data[1].color, 
+        data: this.spending.data, 
+        label: 'Spending', 
+        backgroundColor: () => this.spending.color, 
 
       },
       { 
-        data: this.data[2].data, 
-        label: this.data[2].label, 
+        data: this.export.data, 
+        label: 'Export', 
         yAxisID: 'yL',
-        borderColor: this.data[2].color, 
-        backgroundColor: this.data[2].color,
-        pointBackgroundColor: this.data[2].color,
+        borderColor: () => this.export.color, 
+        backgroundColor: () => this.export.color,
+        pointBackgroundColor: () => this.export.color,
         borderDash: [10,4],
-        pointBorderColor: this.data[2].color,
+        pointBorderColor: () => this.export.color,
         type: 'line',
         stack: 'combined',
         pointStyle: 'rect',
@@ -253,13 +300,13 @@ export class GovBudgetComponent implements OnInit {
         }
       },
       { 
-        data: this.data[3].data, 
-        label: this.data[3].label, 
+        data: this.import.data, 
+        label: 'Import', 
         yAxisID: 'yL',
-        borderColor: this.data[3].color, 
-        backgroundColor: this.data[3].color,
-        pointBackgroundColor: this.data[3].color,
-        pointBorderColor: this.data[3].color,
+        borderColor: () => this.import.color, 
+        backgroundColor: () => this.import.color,
+        pointBackgroundColor: () => this.import.color,
+        pointBorderColor: () => this.import.color,
         borderDash: [10,4],
         type: 'line',
         stack: 'combined',
@@ -276,29 +323,29 @@ export class GovBudgetComponent implements OnInit {
     ],
   };
   public monthChartData: ChartData = {
-    labels: this.mounthLabels,
+    labels: this.monthLabelsSet,
     datasets: [
       { 
-        data: this.monthData[0].data, 
-        label: this.monthData[0].label, 
-        backgroundColor: this.monthData[0].color,
+        data: this.income.month, 
+        label: "Income", 
+        backgroundColor: () => this.income.color,
         stack: 'combined',
       },
       { 
-        data: this.monthData[1].data, 
-        label: this.monthData[1].label, 
-        backgroundColor: this.monthData[1].color, 
+        data: this.spending.month, 
+        label: "Spending", 
+        backgroundColor: () => this.spending.color, 
 
       },
       { 
-        data: this.monthData[2].data, 
-        label: this.monthData[2].label, 
+        data: this.export.month, 
+        label: 'Export', 
         yAxisID: 'yL',
-        borderColor: this.monthData[2].color, 
-        backgroundColor: this.monthData[2].color,
-        pointBackgroundColor: this.monthData[2].color,
+        borderColor: () => this.export.color, 
+        backgroundColor: () => this.export.color,
+        pointBackgroundColor: () => this.export.color,
         borderDash: [10,4],
-        pointBorderColor: this.monthData[2].color,
+        pointBorderColor: () => this.export.color,
         type: 'line',
         stack: 'combined',
         pointStyle: 'rect',
@@ -314,13 +361,13 @@ export class GovBudgetComponent implements OnInit {
         }
       },
       { 
-        data: this.monthData[3].data, 
-        label: this.monthData[3].label, 
+        data: this.import.month, 
+        label: 'Import', 
         yAxisID: 'yL',
-        borderColor: this.monthData[3].color, 
-        backgroundColor: this.monthData[3].color,
-        pointBackgroundColor: this.monthData[3].color,
-        pointBorderColor: this.monthData[3].color,
+        borderColor: () => this.import.color, 
+        backgroundColor: () => this.import.color,
+        pointBackgroundColor: () => this.import.color,
+        pointBorderColor: () => this.import.color,
         borderDash: [10,4],
         type: 'line',
         stack: 'combined',

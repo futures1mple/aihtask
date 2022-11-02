@@ -98,17 +98,17 @@ export const currencyData = [
         data: Array.from({length: 9}, () => Math.floor(Math.random() * 30)),
         label: 'Sofaz',
         color: 'rgba(52,125,160,255)'
-      },
-      {
+    },
+    {
         data: Array.from({length: 9}, () => Math.floor(Math.random() * 20)),
         label:'Cbar',
         color: 'rgba(226,120,112,255)'
-      },
-      {
+    },
+    {
         data: Array.from({length: 9}, () => Math.floor(Math.random() * 10)),
         label: 'Mof',
         color: 'rgba(67,188,180,255)'
-      }
+    }
 ]
 export const currencyMonthData = [
     {
