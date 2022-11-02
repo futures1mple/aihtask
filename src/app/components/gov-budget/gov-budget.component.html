@@ -1,5 +1,5 @@
 <div class="chart-component" >
-    <label style="width: 100%;"><span class="title">Goverment Budget & foreign trade ,</span> In ₼</label>
+    <label class="title-container" style="width: 100%;"><span class="title">Goverment Budget & Foreign Trade,</span> In ₼</label>
     <div class="legends-container">
         <div class="" *ngFor="let legend of this.data?.years?.data">
             <div class="legend">
@@ -12,36 +12,30 @@
     </div>
     <div class="charts-container">
 
-        <div class="chart">
-            <canvas 
-            class="chart-canvas"
-            baseChart
-            height="300px"
-            [data]="barChartData"
-            [options]="barChartOptions"
-            [type]="barChartType"
-            [plugins]="barChartPlugins"
-            (wheel)="scroll($event, chart)"
-            >
-            </canvas>
+        <div class="chart left-chart">
+            <div class="chart-box">
+
+                <canvas 
+                class="chart-canvas"
+                baseChart
+                [data]="barChartData"
+                [options]="barChartOptions"
+                [type]="barChartType"
+                [plugins]="barChartPlugins"
+                >
+                </canvas>
+            </div>
         </div>
         <div class="chart second-chart">
             <canvas 
             class="chart-canvas"
             baseChart
-            height="300px"
             [data]="monthChartData"
             [options]="monthChartOptions"
             [type]="barChartType"
             [plugins]="barChartPlugins"
             >
             </canvas>
-        </div>
-    </div>
-    <div class="scroll-btn-container">
-        <div class="btn-container">
-            <div class="btn" (click)="buttonScroll(true , chart)"> < </div>
-            <div class="btn" (click)="buttonScroll(false , chart)"> > </div>
         </div>
     </div>
 </div>

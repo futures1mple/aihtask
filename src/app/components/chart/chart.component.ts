@@ -86,11 +86,10 @@ export class ChartComponent implements OnInit {
   
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       
       x: {
-        min: 7,
-        max: 8,
         stacked: true,
         grid: {
           display: false
@@ -135,6 +134,7 @@ export class ChartComponent implements OnInit {
   };
   public monthChartOptions: ChartConfiguration['options'] = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       
       x: {
@@ -256,13 +256,13 @@ export class ChartComponent implements OnInit {
         data: [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
         
         datalabels: {
+          align: 'top',
+          anchor: 'end',
           labels: {
             title: {
               color: 'black'
             }
           },
-          align: 'top',
-          anchor: 'end',
           formatter: (value, context) => {
             const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
               return datapoint.data[context.dataIndex]
@@ -292,13 +292,13 @@ export class ChartComponent implements OnInit {
         data: [ 0, 0 ], 
         
         datalabels: {
+          align: 'top',
+          anchor: 'end',
           labels: {
             title: {
               color: 'black'
             }
           },
-          align: 'top',
-          anchor: 'end',
           formatter: (value, context) => {
             const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
               return datapoint.data[context.dataIndex]

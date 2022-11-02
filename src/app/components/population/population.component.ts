@@ -149,6 +149,7 @@ export class PopulationComponent implements OnInit {
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       y: {
         display: false,
@@ -170,8 +171,6 @@ export class PopulationComponent implements OnInit {
         offset: true
       },
       x: {
-        min: 7,
-        max: 8,
         grid: {
           display: false
         },
@@ -200,8 +199,10 @@ export class PopulationComponent implements OnInit {
       }
     }
   };
+
   public monthChartOptions: ChartConfiguration['options'] = {
     responsive: true,
+    maintainAspectRatio: false,
     scales: {
       y: {
         display: false,
@@ -258,62 +259,12 @@ export class PopulationComponent implements OnInit {
       }
     }
   };
+
   public barChartType: ChartType = 'line';
+  
   public barChartPlugins = [
     DataLabelsPlugin
   ];
-
-
-
-  public scroll = (event: WheelEvent, chart: any) => {
-    if(this.keyPressed) {
-
-      // console.log(event);
-      // console.log(chart);
-      const dataLength = chart.chart.data.labels.length
-      
-      if(event.deltaY > 0) {
-        if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
-          chart.chart.config.options.scales.x.min = dataLength - 2
-          chart.chart.config.options.scales.x.max = dataLength - 1
-        } else {
-          chart.chart.config.options.scales.x.min += 1
-          chart.chart.config.options.scales.x.max += 1
-        }
-      } else if(event.deltaY < 0) {
-        if(chart.chart.config.options.scales.x.min <= 0) {
-          chart.chart.config.options.scales.x.min = 0
-          chart.chart.config.options.scales.x.max = 1
-        } else {
-          chart.chart.config.options.scales.x.min -= 1
-          chart.chart.config.options.scales.x.max -= 1
-        }
-      }
-    }
-    chart.update()
-    
-  }
-  public buttonScroll = (left: boolean, chart: any) => {
-    const dataLength = chart.chart.data.labels.length
-    if(!left) {
-      if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
-        chart.chart.config.options.scales.x.min = dataLength - 2
-        chart.chart.config.options.scales.x.max = dataLength - 1
-      } else {
-        chart.chart.config.options.scales.x.min += 1
-        chart.chart.config.options.scales.x.max += 1
-      }
-    } else {
-      if(chart.chart.config.options.scales.x.min <= 0) {
-        chart.chart.config.options.scales.x.min = 0
-        chart.chart.config.options.scales.x.max = 1
-      } else {
-      chart.chart.config.options.scales.x.min -= 1
-      chart.chart.config.options.scales.x.max -= 1
-      }
-    }
-    chart.update()
-  }
 
   public barChartData: ChartData = {
     labels: this.labelsSet,
@@ -339,8 +290,6 @@ export class PopulationComponent implements OnInit {
         datalabels: {
           labels: {
             title: {
-              textStrokeColor:'grey',
-              borderColor: 'grey',
               align: 'bottom',
               color: 'black'
             }
@@ -373,8 +322,6 @@ export class PopulationComponent implements OnInit {
         datalabels: {
           labels: {
             title: {
-              textStrokeColor:'grey',
-              borderColor: 'grey',
               align: 'bottom',
               color: 'black'
             }

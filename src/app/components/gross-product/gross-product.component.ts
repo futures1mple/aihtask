@@ -106,8 +106,8 @@ export class GrossProductComponent implements OnInit {
         padding: {
           top: 8,
           bottom: 8,
-          left: 20,
-          right: 20,
+          left: 15,
+          right: 15,
         },
         font: {
           size: 14
@@ -154,7 +154,7 @@ export class GrossProductComponent implements OnInit {
       type: 'line',
       xMin: -0.5,
       xMax: -0.5,
-      borderDash: [5,5]
+      borderDash: [5,5],
     },
     {
       type: 'line',
@@ -168,7 +168,7 @@ export class GrossProductComponent implements OnInit {
   
   public monthChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-
+    maintainAspectRatio: false,
     // We use these empty structures as placeholders for dynamic theming.
     scales: {
       y: {
@@ -203,12 +203,15 @@ export class GrossProductComponent implements OnInit {
       },
       legend: {
         display: false,
-        align: "start"
+        align: "start",
       },
       datalabels: {
         labels: {
           title: {
-            color: 'white'
+            color: 'white',
+            font: {
+              size: 10
+            }
           }
         },
         anchor: 'center',
@@ -230,7 +233,7 @@ export class GrossProductComponent implements OnInit {
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-
+    maintainAspectRatio: false,
     // We use these empty structures as placeholders for dynamic theming.
     scales: {
       y: {
@@ -246,8 +249,6 @@ export class GrossProductComponent implements OnInit {
         beginAtZero: true,
       },
       x: {
-        min: 7,
-        max: 8,
         stacked: true,
         grid: {
           display: false
@@ -288,58 +289,12 @@ export class GrossProductComponent implements OnInit {
       }
     }
   };
+
   public barChartType: ChartType = 'bar';
+  
   public barChartPlugins = [
     DataLabelsPlugin
   ];
-
-  public scroll = (event: WheelEvent, chart: any) => {
-    if(this.keyPressed) {
-      const dataLength = chart.chart.data.labels.length
-      
-      if(event.deltaY > 0) {
-        if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
-          chart.chart.config.options.scales.x.min = dataLength - 2
-          chart.chart.config.options.scales.x.max = dataLength - 1
-        } else {
-          chart.chart.config.options.scales.x.min += 1
-          chart.chart.config.options.scales.x.max += 1
-        }
-      } else if(event.deltaY < 0) {
-        if(chart.chart.config.options.scales.x.min <= 0) {
-          chart.chart.config.options.scales.x.min = 0
-          chart.chart.config.options.scales.x.max = 1
-        } else {
-        chart.chart.config.options.scales.x.min -= 1
-        chart.chart.config.options.scales.x.max -= 1
-      }
-    }
-    chart.update()
-  }
-    
-  }
-
-  public buttonScroll = (left: boolean, chart: any) => {
-    const dataLength = chart.chart.data.labels.length
-    if(!left) {
-      if(chart.chart.config.options.scales.x.max >= dataLength - 1) {
-        chart.chart.config.options.scales.x.min = dataLength - 2
-        chart.chart.config.options.scales.x.max = dataLength - 1
-      } else {
-        chart.chart.config.options.scales.x.min += 1
-        chart.chart.config.options.scales.x.max += 1
-      }
-    } else {
-      if(chart.chart.config.options.scales.x.min <= 0) {
-        chart.chart.config.options.scales.x.min = 0
-        chart.chart.config.options.scales.x.max = 1
-      } else {
-      chart.chart.config.options.scales.x.min -= 1
-      chart.chart.config.options.scales.x.max -= 1
-      }
-    }
-    chart.update()
-  }
 
   public barChartData: ChartData = {
     labels: this.labelsSet,
@@ -358,7 +313,6 @@ export class GrossProductComponent implements OnInit {
           labels: {
             title: {
               display: false,
-              color: 'black',
               align: 'top',
             },
           }
@@ -372,13 +326,13 @@ export class GrossProductComponent implements OnInit {
         data: [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ], 
         
         datalabels: {
+          align: 'top',
+          anchor: 'end',
           labels: {
             title: {
               color: 'black'
             }
           },
-          align: 'top',
-          anchor: 'end',
           formatter: (value, context) => {
             const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
               return datapoint.data[context.dataIndex]
@@ -429,13 +383,13 @@ export class GrossProductComponent implements OnInit {
         data: [ 0, 0 ], 
         
         datalabels: {
+          align: 'top',
+          anchor: 'end',
           labels: {
             title: {
               color: 'black'
             }
           },
-          align: 'top',
-          anchor: 'end',
           formatter: (value, context) => {
             const sumValue = context.chart.config.data.datasets.map((datapoint)=>{
               return datapoint.data[context.dataIndex]
